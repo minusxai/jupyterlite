@@ -1,0 +1,37 @@
+name: Review browser runtime core
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'proof/runtime-core-*'
+permissions:
+  contents: read
+concurrency:
+  group: browser-runtime-core
+  cancel-in-progress: false
+jobs:
+  core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - name: Build reviewed core within resource limits
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p runtime-proof
+          docker run --rm --cpus=4 --memory=6000000000 --memory-swap=6000000000 \
+            --mount type=bind,src="$PWD",dst=/workspace \
+            --workdir /workspace \
+            python:3.14.10-bookworm@sha256:1bf6dbbc61622e8d62cff175ea098209b7d3b91e064a77acc4505c921c0c4899 \
+            bash scripts/build-runtime-core.sh 2>&1 | tee runtime-proof/build.log
+      - name: Bind final logs and artifacts after container exits
+        if: always()
+        run: python3 scripts/finalize-runtime-proof.py runtime-proof
+      - name: Retain exact source and core provenance
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reviewed-runtime-core
+          path: runtime-proof
+          if-no-files-found: error

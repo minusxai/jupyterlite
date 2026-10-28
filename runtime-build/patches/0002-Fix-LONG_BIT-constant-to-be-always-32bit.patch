@@ -1,0 +1,14 @@
+--- a/Include/pyport.h
++++ b/Include/pyport.h
+@@ -414,10 +414,11 @@
+ 
+ #ifndef LONG_MIN
+ #define LONG_MIN (-LONG_MAX-1)
+ #endif
+ 
++#undef LONG_BIT
+ #ifndef LONG_BIT
+ #define LONG_BIT (8 * SIZEOF_LONG)
+ #endif
+ 
+ #if LONG_BIT != 8 * SIZEOF_LONG

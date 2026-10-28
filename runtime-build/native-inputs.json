@@ -1,0 +1,23 @@
+[
+  {
+    "name": "xz",
+    "url": "https://github.com/xz-mirror/xz/releases/download/v5.2.2/xz-5.2.2.tar.gz",
+    "sha256": "73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2",
+    "bytes": 1464228,
+    "origin": "Official upstream HTTPS URL selected by exact Pyodide source; digest locally measured, not signedchecksum"
+  },
+  {
+    "name": "zstd",
+    "url": "https://github.com/python/cpython-source-deps/archive/refs/tags/zstd-1.5.7.tar.gz",
+    "sha256": "f24b52470d12f466e9fa4fcc94e6c530625ada51d7b36de7fdc6ed7e6f499c8e",
+    "bytes": 2440298,
+    "origin": "Official upstream HTTPS URL selected by exact Pyodide source; digest locally measured, not signedchecksum"
+  },
+  {
+    "name": "sqlite",
+    "url": "https://www.sqlite.org/2022/sqlite-autoconf-3390000.tar.gz",
+    "sha256": "e90bcaef6dd5813fcdee4e867f6b65f3c9bfd0aec0f1017f9f3bbce1e4ed09e2",
+    "bytes": 3064015,
+    "origin": "Official upstream HTTPS URL selected by exact Pyodide source; digest locally measured, not signedchecksum"
+  }
+]

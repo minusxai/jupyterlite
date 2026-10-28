@@ -1,0 +1,113 @@
+--- a/Modules/_json.c
++++ b/Modules/_json.c
+@@ -1398,15 +1398,17 @@
+     PyObject *result = PyTuple_Pack(1, str);
+     Py_DECREF(str);
+     return result;
+ }
+ 
++extern PyObject* py_jsnull;
++
+ static PyObject *
+ _encoded_const(PyObject *obj)
+ {
+     /* Return the JSON string representation of None, True, False */
+-    if (obj == Py_None) {
++    if (obj == Py_None || obj == py_jsnull) {
+         return &_Py_ID(null);
+     }
+     else if (obj == Py_True) {
+         return &_Py_ID(true);
+     }
+@@ -1482,11 +1484,11 @@
+ {
+     /* Encode Python object obj to a JSON term */
+     PyObject *newobj;
+     int rv;
+ 
+-    if (obj == Py_None) {
++    if (obj == Py_None || obj == py_jsnull) {
+       return PyUnicodeWriter_WriteASCII(writer, "null", 4);
+     }
+     else if (obj == Py_True) {
+       return PyUnicodeWriter_WriteASCII(writer, "true", 4);
+     }
+@@ -1592,11 +1594,11 @@
+         keystr = Py_NewRef(key);
+     }
+     else if (PyFloat_Check(key)) {
+         keystr = encoder_encode_float(s, key);
+     }
+-    else if (key == Py_True || key == Py_False || key == Py_None) {
++    else if (key == Py_True || key == Py_False || key == Py_None || key == py_jsnull) {
+                     /* This must come before the PyLong_Check because
+                        True and False are also 1 and 0.*/
+         keystr = _encoded_const(key);
+     }
+     else if (PyLong_Check(key)) {
+--- a/Lib/json/encoder.py
++++ b/Lib/json/encoder.py
+@@ -31,10 +31,11 @@
+     ESCAPE_DCT.setdefault(chr(i), '\\u{0:04x}'.format(i))
+     #ESCAPE_DCT.setdefault(chr(i), '\\u%04x' % (i,))
+ del i
+ 
+ INFINITY = float('inf')
++_JSNULL = None
+ 
+ def py_encode_basestring(s):
+     """Return a JSON representation of a Python string
+ 
+     """
+@@ -300,10 +301,12 @@
+                 buf = separator
+             try:
+                 if isinstance(value, str):
+                     yield buf + _encoder(value)
+                 elif value is None:
++                    yield buf + 'null'
++                elif value is _JSNULL:
+                     yield buf + 'null'
+                 elif value is True:
+                     yield buf + 'true'
+                 elif value is False:
+                     yield buf + 'false'
+@@ -370,10 +373,12 @@
+                 key = 'true'
+             elif key is False:
+                 key = 'false'
+             elif key is None:
+                 key = 'null'
++            elif key is _JSNULL:
++                key = 'null'
+             elif isinstance(key, int):
+                 # see comment for int/float in _make_iterencode
+                 key = _intstr(key)
+             elif _skipkeys:
+                 continue
+@@ -391,10 +396,12 @@
+             try:
+                 if isinstance(value, str):
+                     yield _encoder(value)
+                 elif value is None:
+                     yield 'null'
++                elif value is _JSNULL:
++                    yield 'null'
+                 elif value is True:
+                     yield 'true'
+                 elif value is False:
+                     yield 'false'
+                 elif isinstance(value, int):
+@@ -426,10 +433,12 @@
+     def _iterencode(o, _current_indent_level):
+         if isinstance(o, str):
+             yield _encoder(o)
+         elif o is None:
+             yield 'null'
++        elif o is _JSNULL:
++            yield 'null'
+         elif o is True:
+             yield 'true'
+         elif o is False:
+             yield 'false'
+         elif isinstance(o, int):

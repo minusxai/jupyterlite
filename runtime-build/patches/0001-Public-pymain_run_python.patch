@@ -1,0 +1,15 @@
+--- a/Modules/main.c
++++ b/Modules/main.c
+@@ -655,11 +655,11 @@
+ 
+     *exitcode = _pymain_run_repl(config, 1);
+ }
+ 
+ 
+-static void
++void
+ pymain_run_python(int *exitcode)
+ {
+     int set_running_main = 0;
+ 
+     PyObject *main_importer_path = NULL;

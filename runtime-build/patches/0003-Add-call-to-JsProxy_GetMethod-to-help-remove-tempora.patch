@@ -1,0 +1,41 @@
+--- a/Objects/object.c
++++ b/Objects/object.c
+@@ -1564,10 +1564,22 @@
+                  Py_TYPE(self)->tp_name);
+     return NULL;
+ }
+ 
+ 
++
++PyObject* __attribute__((weak))
++JsProxy_GetAttr(PyObject* self, PyObject* attr) {
++    return NULL;
++}
++
++PyObject* __attribute__((weak))
++JsProxy_GetMethod(PyObject* obj, PyObject* name) {
++    return NULL;
++}
++
++
+ /* Specialized version of _PyObject_GenericGetAttrWithDict
+    specifically for the LOAD_METHOD opcode.
+ 
+    Return 1 if a method is found, 0 if it's a regular attribute
+    from __dict__ or something returned by using a descriptor
+@@ -1586,10 +1598,15 @@
+     PyTypeObject *tp = Py_TYPE(obj);
+     if (!_PyType_IsReady(tp)) {
+         if (PyType_Ready(tp) < 0) {
+             return 0;
+         }
++    }
++
++    if (tp->tp_getattro == JsProxy_GetAttr) {
++        *method = JsProxy_GetMethod(obj, name);
++        return 0;
+     }
+ 
+     if (tp->tp_getattro != PyObject_GenericGetAttr || !PyUnicode_CheckExact(name)) {
+         *method = PyObject_GetAttr(obj, name);
+         return 0;

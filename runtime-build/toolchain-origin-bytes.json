@@ -1,0 +1,7 @@
+{
+  "url": "https://storage.googleapis.com/webassembly/emscripten-releases-builds/linux/065bfade0ee2c02138b83cb10049d8be95e146b6/wasm-binaries.tar.xz",
+  "sha256": "7ae996db24911edc535cccf069fb8a3ed63e8dac7abe58e758431abfe3255165",
+  "bytes": 354893508,
+  "observed_at": "2026-10-28T02:00:49.082801+00:00",
+  "origin": "OfficialSDK d7b4130688bfa348392b921ab04015aa15c4f154 manifest release5.0.3 maps065bfade0ee2c02138b83cb10049d8be95e146b6; exactHTTPS origin and locally measured bytes, not maintainer-signed checksum"
+}

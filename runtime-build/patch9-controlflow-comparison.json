@@ -1,0 +1,43 @@
+{
+  "postimage_apply_exit": 0,
+  "files": [
+    {
+      "path": "Include/internal/pycore_emscripten_trampoline.h",
+      "whole_file_identical": true,
+      "diff_lines": 0
+    },
+    {
+      "path": "Include/internal/pycore_runtime_structs.h",
+      "whole_file_identical": true,
+      "diff_lines": 0
+    },
+    {
+      "path": "Python/emscripten_trampoline.c",
+      "whole_file_identical": true,
+      "diff_lines": 0
+    },
+    {
+      "path": "configure",
+      "whole_file_identical": false,
+      "diff_lines": 1161
+    },
+    {
+      "path": "configure.ac",
+      "whole_file_identical": false,
+      "diff_lines": 543
+    }
+  ],
+  "configure_exports": [
+    {
+      "file": "configure",
+      "export_statement_identical": true,
+      "statement": "as_fn_append LINKFORSHARED \" -sEXPORTED_FUNCTIONS=_main,_Py_Version,__PyRuntime,_PyGILState_GetThisThreadState,__Py_DumpTraceback,__PyEM_EMSCRIPTEN_TRAMPOLINE_OFFSET\""
+    },
+    {
+      "file": "configure.ac",
+      "export_statement_identical": true,
+      "statement": "AS_VAR_APPEND([LINKFORSHARED], [\" -sEXPORTED_FUNCTIONS=_main,_Py_Version,__PyRuntime,_PyGILState_GetThisThreadState,__Py_DumpTraceback,__PyEM_EMSCRIPTEN_TRAMPOLINE_OFFSET\"])"
+    }
+  ],
+  "conclusion": "All three complete trampoline/runtime files byte-identical to exact patch9 postimage; configure/ac desired export statements exact. Preserve upstream source, omit patch9."
+}
